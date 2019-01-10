@@ -47,10 +47,32 @@ public class NetworkUtils {
             // use a string builder to hold response
             StringBuilder builder = new StringBuilder();
 
+            String line;
+            while ((line = reader.readLine()) != null){
+                builder.append(line);
+                builder.append("\n");
+            }
+
+            if (builder.length() == 0){
+                return null;
+            }
+
+            bookJsonString = builder.toString();
+
         }catch (IOException e) {
             e.printStackTrace();
         }finally {
             // TODO: 1/10/19
+            if (urlConnection != null){
+                urlConnection.disconnect();
+            }
+            if (reader != null){
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return bookJsonString;
     }
