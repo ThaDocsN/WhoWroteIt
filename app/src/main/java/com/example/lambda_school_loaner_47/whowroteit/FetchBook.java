@@ -3,17 +3,21 @@ package com.example.lambda_school_loaner_47.whowroteit;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.ref.WeakReference;
 
 public class FetchBook extends AsyncTask<String, Void, String> {
 
     //Use weak References to avoid leaking context from Activity
-    private TextView mTitleText;
-    private TextView mAuthorText;
+    private WeakReference<TextView> mTitleText;
+    private WeakReference<TextView> mAuthorText;
 
     public FetchBook(TextView mTitleText, TextView mAuthorText) {
-        this.mTitleText = mTitleText;
-        this.mAuthorText = mAuthorText;
+        this.mTitleText = new WeakReference<>(mTitleText);
+        this.mAuthorText = new WeakReference<>(mAuthorText);
     }
 
     @Override
@@ -24,5 +28,50 @@ public class FetchBook extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(s);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            JSONArray itemsArray = jsonObject.getJSONArray("items");
+
+            int i = 0;
+            String title = null;
+            String authors = null;
+
+            while (i < itemsArray.length() && (authors == null && title == null)){
+                JSONObject book       = itemsArray.getJSONObject(i);
+                JSONObject volumeInfo = book.getJSONObject("volumeInfo");
+
+                try {
+                    title = volumeInfo.getString("title");
+                    authors = volumeInfo.getString("authors");
+
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
+                i++;
+
+                if (title != null && authors != null){
+                    mTitleText.get().setText(title);
+                    mAuthorText.get().setText(authors);
+                }else {
+                    mTitleText.get().setText((R.string.no_results));
+                    mAuthorText.get().setText("");
+                }
+
+            }
+        } catch (JSONException e) {
+
+            mTitleText.get().setText(R.string.no_results);
+            mAuthorText.get().setText("");
+            e.printStackTrace();
+
+        }
     }
 }
