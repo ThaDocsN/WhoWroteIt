@@ -4,6 +4,8 @@ import android.net.Uri;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -30,7 +32,20 @@ public class NetworkUtils {
                     .build();
 
             //convert uri to a url
-            URL requesturl = new URL(builtURI.toString());
+            URL requestURL = new URL(builtURI.toString());
+
+            urlConnection = (HttpURLConnection) requestURL.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
+
+            // Get input stream
+            InputStream inputStream = urlConnection.getInputStream();
+
+            //create buffer reader
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+
+            // use a string builder to hold response
+            StringBuilder builder = new StringBuilder();
 
         }catch (IOException e) {
             e.printStackTrace();
