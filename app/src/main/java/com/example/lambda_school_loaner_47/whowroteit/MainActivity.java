@@ -1,6 +1,8 @@
 package com.example.lambda_school_loaner_47.whowroteit;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -35,8 +37,27 @@ public class MainActivity extends AppCompatActivity {
             inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(),
                 InputMethodManager.HIDE_NOT_ALWAYS);
         }
-        new FetchBook(mTitleText, mAuthorText).execute(queryString);
-        mAuthorText.setText("");
-        mTitleText.setText(getString(R.string.loading));
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = null;
+        if (connectivityManager != null){
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+        }
+
+        if (networkInfo != null && networkInfo.isConnected() && queryString.length() != 0){
+            new FetchBook(mTitleText, mAuthorText).execute(queryString);
+            mAuthorText.setText("");
+            mTitleText.setText(getString(R.string.loading));
+
+        }else {
+            if (queryString.length() == 0){
+                mAuthorText.setText("");
+                mTitleText.setText(getString(R.string.no_search_term));
+            }else {
+                mAuthorText.setText("");
+                mTitleText.setText(getString(R.string.no_network));
+            }
+        }
     }
 }
