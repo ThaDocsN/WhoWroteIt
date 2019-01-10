@@ -11,6 +11,11 @@ public class FetchBook extends AsyncTask<String, Void, String> {
     private WeakReference<TextView> mTitleText;
     private WeakReference<TextView> mAuthorText;
 
+    public FetchBook(WeakReference<TextView> mTitleText, WeakReference<TextView> mAuthorText) {
+        this.mTitleText = mTitleText;
+        this.mAuthorText = mAuthorText;
+    }
+
     @Override
     protected String doInBackground(String... strings) {
         return null;
