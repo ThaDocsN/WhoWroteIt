@@ -1,6 +1,7 @@
 package com.example.lambda_school_loaner_47.whowroteit;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -74,6 +75,7 @@ public class NetworkUtils {
                 }
             }
         }
+        Log.d(LOG_TAG, bookJsonString);
         return bookJsonString;
     }
 }
