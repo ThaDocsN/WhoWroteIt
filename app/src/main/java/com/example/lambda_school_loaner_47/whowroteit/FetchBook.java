@@ -8,17 +8,17 @@ import java.lang.ref.WeakReference;
 public class FetchBook extends AsyncTask<String, Void, String> {
 
     //Use weak References to avoid leaking context from Activity
-    private WeakReference<TextView> mTitleText;
-    private WeakReference<TextView> mAuthorText;
+    private TextView mTitleText;
+    private TextView mAuthorText;
 
-    public FetchBook(WeakReference<TextView> mTitleText, WeakReference<TextView> mAuthorText) {
+    public FetchBook(TextView mTitleText, TextView mAuthorText) {
         this.mTitleText = mTitleText;
         this.mAuthorText = mAuthorText;
     }
 
     @Override
     protected String doInBackground(String... strings) {
-        return null;
+        return NetworkUtils.getBookInfo(strings[0]);
     }
 
     @Override
