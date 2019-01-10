@@ -1,4 +1,4 @@
-package com.example.lambda_school_loaner_47.whowroteit;
+package com.example.lambda_school_loaner_47.whowroteitloader;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
